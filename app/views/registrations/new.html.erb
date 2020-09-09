@@ -1,6 +1,4 @@
-<h1>Registrations#new</h1>
-<%= @grade.number %>年<%= @kumi.number %>組を作成しています。
-
+<h2>データ入力ページ</h2>
 
 <%= form_with(model: @student, url: registrations_path, local: true) do |form| %>
 
@@ -17,29 +15,45 @@
   <%= form.hidden_field :grade_id, value: @grade.id %>
   <%= form.hidden_field :kumi_id, value: @kumi.id %>
 
-  <hr>
+  <div class="card">
+    <div class="card-body">
+      <div class="alert alert-primary" role="alert">
+        <%= @grade.number %>年<%= @kumi.number %>組を作成しています。
+      </div>
+      <div class="form-row">
+        <div class="formg-roup col-sm-4">
+          <%= form.collection_select(
+                :shusseki_id, Shusseki.all, :id, :number,
+                { prompt: "出席番号" }, class: "form-control custom-select",
+                required: true
+              ) %>
+        </div>
+        <div class="w-100 my-2">
+        </div>
 
-  <%= form.collection_select(
-        :shusseki_id, Shusseki.all, :id, :number,
-        { prompt: "出席番号" }, class: "form-control",
-        required: true
-      ) %>
-
-  <div>
-    <%= form.text_field :first_name, placeholder: "姓", required: true %>
-    <%= form.text_field :last_name, placeholder: "名", required: true %><br>
-    <%= form.text_field :first_name_furigana, placeholder: "姓(ふりがな)", required: true %>
-    <%= form.text_field :last_name_furigana, placeholder: "名(ふりがな)", required: true %>
+        <div class="form-group col-sm-6 col-xs-6">
+          <%= form.text_field :first_name, placeholder: "姓", required: true, class: "form-control", id: "firstname" %>
+        </div>
+        <div class="form-group col-sm-6 col-xs-6">
+          <%= form.text_field :last_name, placeholder: "名", required: true, class: "form-control", id: "lastname" %>
+        </div>
+        <div class="form-group col-sm-6">
+          <%= form.text_field :first_name_furigana, placeholder: "姓(ふりがな)", required: true, class: "form-control", id: "firstname_kana" %>
+        </div>
+        <div class="form-group col-sm-6">
+          <%= form.text_field :last_name_furigana, placeholder: "名(ふりがな)", required: true, class: "form-control", id: "lastname_kana" %>
+        </div>
+      </div>
+      <%= form.submit "作成して次へ", class: "btn btn-primary" %>
+      <%= form.submit "作成して終了", name: :end, class: "btn btn-primary" %>
+    </div>
   </div>
-
-  <%= form.submit "作成して次へ" %>
-  <%= form.submit "作成して終了", name: "end" %>
 <% end %>
 
-<hr>
+<hr class="my-5">
 
 <h3><%= @grade.number %>年<%= @kumi.number %>組の生徒一覧</h3>
-<table>
+<table class="table table-hover table-sm">
   <thead>
     <tr>
       <th>番号</th>
@@ -61,3 +75,10 @@
     <% end %>
   </tbody>
 </table>
+
+<script>
+  $(document).ready(function(){
+    $.fn.autoKana("input[id='firstname']", "input[id='firstname_kana']");
+    $.fn.autoKana("input[id='lastname']", "input[id='lastname_kana']");
+  });
+</script>

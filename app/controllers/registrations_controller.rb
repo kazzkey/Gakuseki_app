@@ -11,6 +11,7 @@ class RegistrationsController < ApplicationController
   end
 
   def create
+    @students = Student.where(grade_id: params[:student][:grade_id]).where(kumi_id: params[:student][:kumi_id]).order(:shusseki_id)
     @grade = Grade.find(params[:student][:grade_id])
     @kumi = Kumi.find(params[:student][:kumi_id])
     @student = Student.new(registration_params)
@@ -20,7 +21,7 @@ class RegistrationsController < ApplicationController
       redirect_to registrations_path
     elsif @student.save
       flash[:notice] = "「#{@student.shusseki_id}：#{@student.first_name}#{@student.last_name}」さんを保存しました。"
-      redirect_to action: :new, grade_id: @student.grade_id, kumi_id: @student.kumi_id
+      redirect_to action: "new", grade_id: @student.grade_id, kumi_id: @student.kumi_id
     else
       render :new
     end

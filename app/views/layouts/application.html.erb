@@ -10,19 +10,19 @@
   </head>
 
   <body>
-    <div id="flash">
+    <div id="flash" class="text-white text-center" style="height:60px;">
       <% if notice %>
-        <p class="bg-info">
+        <p class="bg-primary">
           <%= notice %>
         </p>
       <% end %>
       <% if alert %>
-        <p class="bg-warning">
+        <p class="bg-danger">
           <%= alert %>
         </p>
       <% end %>
     </div>
-    <div>
+    <div class="container">
       <%= yield %>
     </div>
   </body>
