@@ -1,0 +1,63 @@
+<h1>Registrations#new</h1>
+<%= @grade.number %>年<%= @kumi.number %>組を作成しています。
+
+
+<%= form_with(model: @student, url: registrations_path, local: true) do |form| %>
+
+  <% if @student.errors.any? %>
+    <div id="error_explanation" class="text-warning">
+      <ul>
+      <% @student.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form.hidden_field :grade_id, value: @grade.id %>
+  <%= form.hidden_field :kumi_id, value: @kumi.id %>
+
+  <hr>
+
+  <%= form.collection_select(
+        :shusseki_id, Shusseki.all, :id, :number,
+        { prompt: "出席番号" }, class: "form-control",
+        required: true
+      ) %>
+
+  <div>
+    <%= form.text_field :first_name, placeholder: "姓", required: true %>
+    <%= form.text_field :last_name, placeholder: "名", required: true %><br>
+    <%= form.text_field :first_name_furigana, placeholder: "姓(ふりがな)", required: true %>
+    <%= form.text_field :last_name_furigana, placeholder: "名(ふりがな)", required: true %>
+  </div>
+
+  <%= form.submit "作成して次へ" %>
+  <%= form.submit "作成して終了", name: "end" %>
+<% end %>
+
+<hr>
+
+<h3><%= @grade.number %>年<%= @kumi.number %>組の生徒一覧</h3>
+<table>
+  <thead>
+    <tr>
+      <th>番号</th>
+      <th>姓</th>
+      <th>名</th>
+      <th>ふりがな</th>
+      <th colspan="1"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @students.each do |student| %>
+      <tr>
+        <td><%= student.shusseki_id %></td>
+        <td><%= student.first_name %></td>
+        <td><%= student.last_name %></td>
+        <td><%= student.first_name_furigana %></td>
+        <td><%= student.last_name_furigana %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
